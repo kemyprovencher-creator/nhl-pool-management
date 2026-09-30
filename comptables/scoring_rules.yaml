@@ -1,5 +1,81 @@
 pool: comptables
-status: to_define
+season: "2026-2027"
+status: active
+updated: "2026-09-30"
+
+roster:
+  total_selections: 16
+  players: 15
+  nhl_teams: 1
+  selected_team: "Minnesota Wild"
+
+active_lineup:
+  total_active_selections: 12
+  forwards: 8
+  defensemen: 2
+  goalies: 1
+  nhl_team: 1
+  bench_players: 4
+
+scoring:
+  skaters:
+    goals: 1
+    assists: 1
+    notes:
+      - "Même calcul que la LNH pour les joueurs autres que les gardiens."
+
+  goalies:
+    offensive_points:
+      goals: 1
+      assists: 1
+    win: 2
+    tie_or_overtime_result: 1
+    shutout_bonus: 3
+    notes:
+      - "Les notions de victoire, nulle et blanchissage suivent la politique de la LNH."
+      - "Un blanchissage s'ajoute au pointage normal du gardien."
+
+  nhl_team:
+    scoring_method: "Même calcul que la LNH"
+
+active_reserve:
+  enabled: true
+  rule:
+    - "Seuls les points produits pendant qu'un joueur est dans l'alignement actif sont comptabilisés."
+    - "Les points produits par un joueur lorsqu'il est sur le banc ne comptent pas pour le cumul régulier."
+    - "Les bonus spéciaux de fin de saison peuvent s'appliquer à une sélection active ou non selon le règlement officiel."
+
+weekly_changes:
+  period_basis: "hebdomadaire"
+  standard_period: "lundi au dimanche"
+  max_changes_per_period: 2
+  effective_time: "immédiatement"
+  interpretation:
+    - "Les 2 changements se renouvellent pour chaque période hebdomadaire."
+    - "Un changement peut être effectué n'importe quel jour pendant la période."
+    - "Le changement devient effectif immédiatement dans PoolExpert."
+    - "À partir du moment où le changement est effectif, les points du joueur entrant comptent et ceux du joueur sortant cessent de compter."
+  constraint:
+    - "Tout changement doit continuer de respecter la composition active de 8 attaquants, 2 défenseurs, 1 gardien et 1 équipe."
+
+optimization_goal:
+  description: "Maximiser les points attendus de l'alignement actif sur la semaine sous une contrainte de 2 changements."
+  implications:
+    - "Ne pas classer les joueurs uniquement selon le nombre de matchs."
+    - "Évaluer le calendrier jour par jour."
+    - "Considérer la valeur d'attendre avant d'utiliser un changement."
+    - "Pour les gardiens, utiliser les départs probables plutôt que seulement le nombre de matchs de l'équipe."
+    - "Tenir compte du rôle offensif, PP1/PP2, trio, adversaires, blessures et risque d'utilisation."
+
+special_periods:
+  - start: "2026-09-29"
+    end: "2026-10-05"
+    max_changes: 2
+    effective_time: "immédiatement"
+  - start: "2026-10-05"
+    end: "2026-10-11"
+    max_changes: 2
+    effective_time: "immédiatement"
 
 notes:
-  - Les règles de pointage exactes du pool doivent encore être documentées.
+  - "Les premières périodes affichées dans PoolExpert présentent un chevauchement apparent au 5 octobre 2026; ne pas extrapoler cette particularité aux semaines suivantes sans vérification."
