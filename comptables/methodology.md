@@ -101,26 +101,51 @@ Exemple :
 un joueur actif lundi-mardi peut être remplacé plus tard par un joueur qui joue jeudi-vendredi-samedi.
 
 ## Rank 7 — Valeur stratégique du changement — 8 %
-Chaque changement doit être évalué en fonction de la valeur supplémentaire qu'il peut générer.
+Chaque changement doit être évalué en fonction de sa valeur nette, et non seulement de son gain immédiat.
 
-### Expected Gain From Change
+### Net Strategic Gain
 
-Formule :
+La base demeure :
 
 ```text
 points attendus du joueur entrant pour le reste de la période
 -
 points attendus du joueur sortant pour le reste de la période
 =
-gain attendu du changement
+gain attendu immédiat
 ```
+
+Mais la recommandation finale doit aussi considérer la semaine suivante.
+
+Le modèle doit fonctionner sur une fenêtre glissante d'environ 7 à 10 jours :
+
+1. reste de la semaine actuelle;
+2. début et calendrier de la semaine suivante;
+3. coût potentiel d'un changement inverse;
+4. coût d'opportunité lié à l'utilisation d'un changement futur.
 
 Exemple :
 - joueur sortant : 2 matchs restants × 0,55 = 1,10 point attendu
 - joueur entrant : 4 matchs restants × 0,65 = 2,60 points attendus
-- gain attendu = +1,50
+- gain attendu immédiat = +1,50
 
-Un changement ne doit pas être utilisé uniquement parce que le joueur entrant a un meilleur score global. Il faut aussi considérer la possibilité qu'une meilleure opportunité apparaisse plus tard dans la semaine.
+Ce gain peut toutefois être réduit si le joueur entrant possède un mauvais calendrier la semaine suivante et qu'il faudra utiliser un nouveau changement pour revenir au joueur initial.
+
+### Types de changement
+
+#### Sustainable switch
+Le joueur entrant améliore ou maintient la valeur de l'alignement cette semaine et la suivante.
+- Priorité élevée.
+
+#### Short-term switch
+Le changement améliore surtout la semaine actuelle, mais reste raisonnablement défendable pour la semaine suivante.
+- Priorité moyenne.
+
+#### Rental switch
+Le changement vise principalement un ou quelques matchs à très court terme et risque de forcer un changement inverse au début de la semaine suivante.
+- Priorité faible sauf gain attendu significatif.
+
+Un changement de fin de semaine ne doit donc jamais être recommandé uniquement parce qu'il ajoute un match. Le système doit d'abord vérifier l'alignement qui sera hérité le lundi suivant.
 
 ## Pondération officielle V1 — Patineurs
 
