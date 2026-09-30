@@ -130,3 +130,54 @@ Si un changement est recommandé :
 - gardiens confirmés
 - calendrier
 - éventuels changements de rôle
+
+
+## Pondération officielle V1 — Legendz
+
+### Patineurs
+
+| Critère | Poids |
+|---|---:|
+| Matchs attendus | 25 % |
+| Projection + rôle | 30 % |
+| Forme récente | 10 % |
+| Opposition | 8 % |
+| Distribution du calendrier | 7 % |
+| Continuité / valeur stratégique | 20 % |
+
+Total : 100 %
+
+### Détail de Projection + rôle
+- Projection de points : 13
+- PP1 / PP2 : 6
+- Temps de glace attendu : 4
+- Ligne à forces égales : 3
+- Qualité des partenaires : 4
+
+## Modèle spécifique aux gardiens
+
+| Critère | Poids |
+|---|---:|
+| Départs projetés | 30 % |
+| Qualité / projection du gardien | 20 % |
+| Probabilité de victoire | 15 % |
+| Opposition | 10 % |
+| Forme récente | 5 % |
+| Probabilité de blanchissage | 5 % |
+| Distribution du calendrier | 5 % |
+| Continuité vers la semaine suivante | 10 % |
+
+Total : 100 %
+
+## Contraintes du ranking
+- Ne jamais comparer directement des joueurs de positions différentes pour décider du banc.
+- Le système doit choisir exactement 2 attaquants, 1 défenseur et 1 gardien pour le banc.
+- Les équipes NHL restent actives et ne sont pas rankées.
+- Aucun joueur non repêché ne peut être proposé.
+- Un seul changement peut être recommandé par semaine.
+- Tout changement doit être évalué sur une fenêtre glissante de 7 à 10 jours.
+
+## Règle Rental switch
+Un Rental switch ne devrait généralement pas être recommandé pour un gain attendu inférieur à environ 1 point.
+
+Ce seuil constitue une hypothèse V1 et devra être validé avec les résultats réels du pool.
