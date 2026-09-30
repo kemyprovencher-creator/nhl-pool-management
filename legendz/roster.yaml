@@ -1,7 +1,14 @@
 pool: legendz
 updated: 2026-09-30
+total_selections: 24
 
 players: []
 
+bench_structure:
+  forwards: 2
+  defensemen: 1
+  goalies: 1
+
 notes:
-  - Roster à fournir.
+  - "Roster détaillé à fournir."
+  - "Tous les autres choix sont actifs."
