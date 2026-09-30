@@ -1,2 +1,22 @@
 pool: legendz
-status: to_define
+version: "1.0"
+status: draft
+updated: "2026-09-30"
+
+principles:
+  - "Le ranking sert d'abord à identifier le banc optimal."
+  - "Avec un seul changement hebdomadaire, la valeur stratégique du changement doit être fortement pénalisée si elle nuit à la semaine suivante."
+
+availability_filter:
+  type: hard_filter_with_probability_adjustment
+  statuses:
+    green:
+      multiplier: 1.0
+    yellow:
+      multiplier: "probability_to_play"
+    red:
+      multiplier: 0.0
+
+notes:
+  - "Les poids détaillés du ranking Legendz seront définis séparément."
+  - "La structure et les contraintes du pool sont maintenant officielles."
