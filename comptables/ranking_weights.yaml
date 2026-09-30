@@ -1,0 +1,16 @@
+pool: comptables
+status: draft
+
+weights:
+  games_scheduled: null
+  player_projection: null
+  powerplay_role: null
+  even_strength_role: null
+  opponent_quality: null
+  recent_form: null
+  injury_or_usage_risk: null
+  goalie_start_probability: null
+
+notes:
+  - Les poids seront définis avec Kémy.
+  - Ne pas inventer de poids tant qu'ils ne sont pas approuvés.
