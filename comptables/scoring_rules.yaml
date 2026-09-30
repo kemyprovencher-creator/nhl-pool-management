@@ -1,0 +1,5 @@
+pool: comptables
+status: to_define
+
+notes:
+  - Les règles de pointage exactes du pool doivent encore être documentées.
