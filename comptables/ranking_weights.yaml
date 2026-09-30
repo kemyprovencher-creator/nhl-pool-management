@@ -110,13 +110,36 @@ goalie_ranking:
     - "Le système du pool valorise fortement les victoires et blanchissages."
 
 change_optimization:
-  metric: expected_gain_from_change
-  formula: "expected_points_incoming_remaining - expected_points_outgoing_remaining"
+  metric: net_strategic_gain
+  base_formula: "expected_points_incoming_remaining - expected_points_outgoing_remaining"
+  rolling_horizon:
+    primary: "reste de la semaine actuelle"
+    secondary: "semaine suivante"
+    recommended_window_days: "7-10"
   principle:
     - "Ne pas utiliser un changement simplement parce qu'un joueur entrant a un meilleur score global."
     - "Comparer les points attendus restants sur la période."
     - "Conserver un changement si une meilleure opportunité est probable plus tard dans la semaine."
     - "Évaluer toute la semaine avant de recommander un changement."
+    - "Tout changement doit aussi considérer l'alignement hérité au début de la semaine suivante."
+    - "Un changement de fin de semaine peut être pénalisé s'il risque d'exiger un changement inverse au début de la période suivante."
+    - "Le gain immédiat doit être comparé au coût d'opportunité futur."
+  switch_types:
+    sustainable_switch:
+      description: "Le joueur entrant améliore ou maintient la valeur de l'alignement cette semaine et la suivante."
+      preference: "élevée"
+    short_term_switch:
+      description: "Le changement améliore surtout la semaine actuelle, mais peut rester acceptable la semaine suivante."
+      preference: "moyenne"
+    rental_switch:
+      description: "Le changement vise principalement un ou quelques matchs à court terme et risque de forcer un retour arrière la semaine suivante."
+      preference: "faible sauf gain attendu significatif"
+  net_strategic_gain_components:
+    - "Gain attendu sur le reste de la semaine actuelle."
+    - "Valeur attendue du joueur entrant au début de la semaine suivante."
+    - "Risque de devoir consommer un changement inverse la semaine suivante."
+    - "Coût d'opportunité de perdre un changement futur."
+
 
 lineup_constraints:
   forwards: 8
