@@ -1,2 +1,77 @@
 pool: legendz
-status: to_define
+season: "2026-2027"
+status: active
+updated: "2026-09-30"
+
+season_dates:
+  start: "2026-09-29"
+  end: "2027-04-11"
+
+roster:
+  total_selections: 24
+  bench:
+    forwards: 2
+    defensemen: 1
+    goalies: 1
+    total: 4
+  active_count: 20
+  notes:
+    - "Tous les choix autres que les 4 joueurs au banc comptent dans l'alignement actif."
+
+active_lineup_constraints:
+  forwards:
+    max: 12
+  defensemen:
+    min: 2
+  goalies:
+    min: 2
+    max: 2
+  notes:
+    - "Il doit donc toujours y avoir exactement 2 gardiens actifs."
+    - "Le banc doit contenir exactement 2 attaquants, 1 défenseur et 1 gardien."
+
+weekly_period:
+  week_start: "dimanche"
+  standard_period: "dimanche au samedi"
+
+lineup_changes:
+  first_period:
+    start: "2026-09-29"
+    end: "2026-10-03"
+    max_changes: 255
+    effective_time: "immédiatement"
+  standard_periods:
+    max_changes_per_week: 1
+    effective_time: "immédiatement"
+  interpretation:
+    - "Le changement peut être effectué pendant la période hebdomadaire."
+    - "Le changement devient effectif immédiatement."
+    - "Avec un seul changement par semaine, la continuité vers la semaine suivante doit être considérée avant toute recommandation."
+
+scoring:
+  skaters:
+    goals: 1
+    assists: 1
+  goalies:
+    goals: 1
+    assists: 1
+    wins: 2
+    overtime_losses: 1
+    shutout_bonus: 1
+  nhl_teams:
+    wins: 2
+    overtime_losses: 1
+
+tie_break:
+  rule: "Le plus petit nombre de parties jouées"
+
+transactions:
+  pool_expert_setting: "Conserver les points"
+  house_rule:
+    free_agents_allowed: false
+    description: "Les joueurs non repêchés / agents libres ne peuvent pas être ajoutés."
+  notes:
+    - "Ne pas construire de stratégie de waiver wire ou d'agents libres."
+
+source_priority:
+  - "Les règles maison confirmées par Kémy ont préséance sur un paramètre PoolExpert qui serait contradictoire."
