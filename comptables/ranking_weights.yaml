@@ -1,16 +1,133 @@
 pool: comptables
-status: draft
+version: "1.0"
+status: active
+updated: "2026-09-30"
 
-weights:
-  games_scheduled: null
-  player_projection: null
-  powerplay_role: null
-  even_strength_role: null
-  opponent_quality: null
-  recent_form: null
-  injury_or_usage_risk: null
-  goalie_start_probability: null
+availability_filter:
+  type: hard_filter_with_probability_adjustment
+  principle:
+    - "La disponibilité est évaluée avant le score pondéré."
+    - "Un joueur OUT, IR, suspendu ou retranché est recommandé au banc, sauf cas exceptionnel documenté."
+    - "Un joueur incertain (day-to-day, game-time decision, retour progressif) conserve un score, mais celui-ci est ajusté selon sa probabilité estimée de jouer."
+  statuses:
+    green:
+      description: "Disponible normalement"
+      score_multiplier: 1.0
+    yellow:
+      description: "Disponibilité incertaine"
+      score_multiplier: "probability_to_play"
+    red:
+      description: "OUT / IR / suspendu / retranché"
+      score_multiplier: 0.0
 
-notes:
-  - Les poids seront définis avec Kémy.
-  - Ne pas inventer de poids tant qu'ils ne sont pas approuvés.
+skater_ranking:
+  total_weight: 100
+
+  weights:
+    expected_games:
+      weight: 30
+      rank: 2
+      description: "Nombre de matchs réellement attendus dans la période."
+      notes:
+        - "Utiliser les matchs attendus, pas seulement les matchs au calendrier."
+        - "Réduire le volume attendu si un joueur risque d'être scratché ou limité."
+
+    projection_and_role:
+      weight: 35
+      rank: 3
+      description: "Qualité intrinsèque du joueur et qualité de son rôle actuel."
+      components:
+        projected_points:
+          weight_within_component: 15
+        powerplay_role:
+          weight_within_component: 7
+        expected_toi:
+          weight_within_component: 5
+        even_strength_line:
+          weight_within_component: 4
+        linemate_quality:
+          weight_within_component: 4
+      notes:
+        - "PP1 doit être significativement valorisé par rapport à PP2 ou à l'absence de rôle en avantage numérique."
+        - "Les changements récents de rôle doivent être considérés rapidement."
+
+    recent_form:
+      weight: 12
+      rank: 4
+      description: "Forme individuelle récente sur les 5 derniers matchs."
+      signals:
+        - "Points"
+        - "Tirs"
+        - "Temps de glace"
+        - "Points en avantage numérique"
+        - "Promotion ou rétrogradation de ligne"
+      notes:
+        - "La production brute ne doit pas être utilisée seule."
+        - "Une séquence soutenue par une hausse de rôle est plus crédible qu'une simple séquence chanceuse."
+
+    opponent_quality:
+      weight: 8
+      rank: 5
+      description: "Difficulté des adversaires de la période."
+      signals:
+        - "Séquence des 10 derniers matchs de l'adversaire"
+        - "Buts accordés par match"
+        - "Penalty kill"
+        - "Gardien adverse probable"
+        - "Fatigue et back-to-back adverse"
+        - "Domicile vs extérieur"
+
+    schedule_distribution:
+      weight: 7
+      rank: 6
+      description: "Répartition des matchs dans la semaine."
+      signals:
+        - "Jours exacts des matchs"
+        - "Back-to-back"
+        - "Séquences de matchs rapprochés"
+        - "Trous de calendrier"
+        - "Complémentarité avec les joueurs du banc"
+
+    strategic_change_value:
+      weight: 8
+      rank: 7
+      description: "Valeur stratégique liée à l'utilisation d'un des 2 changements hebdomadaires."
+      notes:
+        - "Ce poids contribue au score, mais la décision de faire un changement doit aussi utiliser une métrique séparée de gain attendu."
+
+goalie_ranking:
+  total_weight: 100
+  weights:
+    projected_starts: 35
+    goalie_quality_projection: 25
+    win_probability: 20
+    opponent_quality: 10
+    recent_form: 5
+    shutout_probability: 5
+  notes:
+    - "Utiliser les départs projetés plutôt que le nombre de matchs de l'équipe."
+    - "Tenir compte des back-to-back et du partage du filet."
+    - "Le système du pool valorise fortement les victoires et blanchissages."
+
+change_optimization:
+  metric: expected_gain_from_change
+  formula: "expected_points_incoming_remaining - expected_points_outgoing_remaining"
+  principle:
+    - "Ne pas utiliser un changement simplement parce qu'un joueur entrant a un meilleur score global."
+    - "Comparer les points attendus restants sur la période."
+    - "Conserver un changement si une meilleure opportunité est probable plus tard dans la semaine."
+    - "Évaluer toute la semaine avant de recommander un changement."
+
+lineup_constraints:
+  forwards: 8
+  defensemen: 2
+  goalies: 1
+  nhl_team: 1
+  notes:
+    - "L'équipe NHL n'est pas incluse dans le ranking des joueurs; elle demeure automatiquement dans l'alignement."
+    - "Toute recommandation doit respecter les contraintes de position."
+
+governance:
+  - "Cette version est la V1 officielle du modèle."
+  - "Les poids doivent être révisés seulement après observation de résultats réels ou décision explicite."
+  - "Toute modification importante des poids doit être documentée dans GitHub."
