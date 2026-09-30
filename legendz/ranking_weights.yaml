@@ -1,22 +1,165 @@
 pool: legendz
 version: "1.0"
-status: draft
+status: active
 updated: "2026-09-30"
-
-principles:
-  - "Le ranking sert d'abord à identifier le banc optimal."
-  - "Avec un seul changement hebdomadaire, la valeur stratégique du changement doit être fortement pénalisée si elle nuit à la semaine suivante."
 
 availability_filter:
   type: hard_filter_with_probability_adjustment
+  principle:
+    - "La disponibilité est évaluée avant le score pondéré."
+    - "Un joueur OUT, IR, suspendu ou retranché est prioritaire pour le banc dans sa catégorie."
+    - "Un joueur incertain conserve un score, ajusté selon sa probabilité estimée de jouer."
   statuses:
     green:
-      multiplier: 1.0
+      description: "Disponible normalement"
+      score_multiplier: 1.0
     yellow:
-      multiplier: "probability_to_play"
+      description: "Day-to-day / game-time decision / retour progressif"
+      score_multiplier: "probability_to_play"
     red:
-      multiplier: 0.0
+      description: "OUT / IR / suspendu / retranché"
+      score_multiplier: 0.0
 
-notes:
-  - "Les poids détaillés du ranking Legendz seront définis séparément."
-  - "La structure et les contraintes du pool sont maintenant officielles."
+lineup_constraints:
+  bench:
+    forwards: 2
+    defensemen: 1
+    goalies: 1
+  active:
+    forwards_max: 12
+    defensemen_min: 2
+    goalies_min: 2
+    goalies_max: 2
+  teams:
+    ranking_enabled: false
+    notes:
+      - "Les équipes NHL restent actives et ne sont pas incluses dans le ranking."
+  notes:
+    - "Les positions ne sont jamais comparées entre elles pour décider du banc."
+    - "Le ranking sert à identifier les 2 attaquants, 1 défenseur et 1 gardien à laisser au banc."
+
+skater_ranking:
+  total_weight: 100
+  weights:
+    expected_games:
+      rank: 2
+      weight: 25
+      description: "Nombre de matchs réellement attendus dans la période."
+      notes:
+        - "Utiliser les matchs attendus, pas seulement les matchs au calendrier."
+        - "Réduire le volume attendu si le joueur risque d'être scratché ou limité."
+
+    projection_and_role:
+      rank: 3
+      weight: 30
+      description: "Projection de points et qualité du rôle actuel."
+      components:
+        projected_points:
+          weight_within_component: 13
+        powerplay_role:
+          weight_within_component: 6
+        expected_toi:
+          weight_within_component: 4
+        even_strength_line:
+          weight_within_component: 3
+        linemate_quality:
+          weight_within_component: 4
+      notes:
+        - "PP1 doit être valorisé clairement par rapport à PP2 ou aucun rôle significatif."
+        - "Les changements récents de rôle doivent être intégrés rapidement."
+
+    recent_form:
+      rank: 4
+      weight: 10
+      description: "Forme individuelle récente sur les 5 derniers matchs."
+      signals:
+        - "Points"
+        - "Tirs"
+        - "Temps de glace"
+        - "Points en avantage numérique"
+        - "Promotion ou rétrogradation de ligne"
+      notes:
+        - "La production brute ne doit pas être utilisée seule."
+        - "Une séquence soutenue par une hausse de rôle est plus crédible qu'une simple séquence chanceuse."
+
+    opponent_quality:
+      rank: 5
+      weight: 8
+      description: "Difficulté des adversaires."
+      signals:
+        - "Séquence des 10 derniers matchs de l'adversaire"
+        - "Buts accordés"
+        - "Penalty kill"
+        - "Gardien adverse probable"
+        - "Back-to-back"
+        - "Domicile / extérieur"
+
+    schedule_distribution:
+      rank: 6
+      weight: 7
+      description: "Répartition des matchs dans la semaine."
+      signals:
+        - "Jours exacts des matchs"
+        - "Back-to-back"
+        - "Séquences rapprochées"
+        - "Trous de calendrier"
+        - "Complémentarité entre joueur actif et joueur du banc"
+
+    strategic_continuity:
+      rank: 7
+      weight: 20
+      description: "Valeur stratégique du changement et continuité vers la semaine suivante."
+      notes:
+        - "Le pool n'accorde qu'un seul changement hebdomadaire."
+        - "Les Rental switches doivent être fortement pénalisés."
+        - "Le modèle doit considérer une fenêtre glissante de 7 à 10 jours."
+
+goalie_ranking:
+  total_weight: 100
+  weights:
+    projected_starts: 30
+    goalie_quality_projection: 20
+    win_probability: 15
+    opponent_quality: 10
+    recent_form: 5
+    shutout_probability: 5
+    schedule_distribution: 5
+    interweek_continuity: 10
+  notes:
+    - "Utiliser les départs projetés plutôt que le nombre de matchs de l'équipe."
+    - "Toujours tenir compte du partage du filet et des back-to-back."
+    - "Le ranking choisit le gardien à laisser au banc parmi les 3."
+
+change_optimization:
+  metric: net_strategic_gain
+  rolling_horizon_days: "7-10"
+  weekly_change_limit: 1
+  base_formula: "expected_points_incoming_remaining - expected_points_outgoing_remaining"
+  principles:
+    - "Ne jamais proposer plus d'un changement par semaine."
+    - "Toujours regarder la semaine suivante avant de recommander un changement."
+    - "Si le gain attendu est faible, conserver le changement est préférable à forcer un move."
+    - "Un joueur blessé peut parfois rester actif temporairement si aucun changement rentable n'est disponible; le rapport doit alors le signaler explicitement."
+  switch_types:
+    sustainable_switch:
+      description: "Le joueur entrant améliore ou maintient la valeur cette semaine et la suivante."
+      preference: "élevée"
+    short_term_switch:
+      description: "Le gain est surtout immédiat mais demeure acceptable pour la semaine suivante."
+      preference: "moyenne"
+    rental_switch:
+      description: "Le changement vise surtout un ou quelques matchs et risque de forcer un retour arrière."
+      preference: "faible"
+      default_min_expected_gain: 1.0
+      notes:
+        - "Seuil initial expérimental; à réviser avec les résultats réels."
+
+free_agents:
+  allowed: false
+  notes:
+    - "Ne jamais proposer un joueur non repêché."
+
+governance:
+  - "Cette version est la V1 officielle du ranking Legendz."
+  - "Les poids ne doivent pas être modifiés après une seule mauvaise semaine."
+  - "Toute modification importante doit être versionnée dans GitHub."
