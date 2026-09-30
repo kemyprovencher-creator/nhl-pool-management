@@ -2,13 +2,103 @@ pool: legendz
 updated: 2026-09-30
 total_selections: 24
 
-players: []
+forwards:
+  - name: Elias Pettersson
+    team: VAN
+    identity_note: "Centre des Vancouver Canucks; ne pas confondre avec le défenseur du même nom."
+    status: active
+  - name: Artemi Panarin
+    team: LA
+    status: active
+  - name: Matthew Tkachuk
+    team: FLA
+    status: active
+  - name: Macklin Celebrini
+    team: SJ
+    status: active
+  - name: Matvei Michkov
+    team: PHI
+    status: active
+  - name: Dylan Holloway
+    team: STL
+    status: active
+  - name: Cutter Gauthier
+    team: ANA
+    status: active
+  - name: J.T. Miller
+    team: NYR
+    status: active
+  - name: Trevor Zegras
+    team: PHI
+    status: active
+  - name: Zach Hyman
+    team: EDM
+    status: active
+  - name: Connor Bedard
+    team: CHI
+    status: bench
+  - name: Pavel Zacha
+    team: BOS
+    status: bench
+
+defensemen:
+  - name: Jamie Drysdale
+    team: PHI
+    status: active
+  - name: Lane Hutson
+    team: MTL
+    status: active
+  - name: Roman Josi
+    team: NSH
+    status: active
+  - name: Quinn Hughes
+    team: MIN
+    status: active
+  - name: Seth Jones
+    team: FLA
+    status: active
+  - name: Brandon Montour
+    team: SEA
+    status: bench
+
+goalies:
+  - name: Andrei Vasilevskiy
+    team: TB
+    status: active
+  - name: Ilya Sorokin
+    team: NYI
+    status: active
+  - name: Jesper Wallstedt
+    team: MIN
+    status: bench
+
+nhl_teams:
+  - name: Vegas Golden Knights
+    team: VGK
+    status: active
+  - name: Edmonton Oilers
+    team: EDM
+    status: active
+  - name: Dallas Stars
+    team: DAL
+    status: active
 
 bench_structure:
   forwards: 2
   defensemen: 1
   goalies: 1
 
+counts:
+  forwards_total: 12
+  defensemen_total: 6
+  goalies_total: 3
+  nhl_teams_total: 3
+  active_forwards: 10
+  active_defensemen: 5
+  active_goalies: 2
+  active_nhl_teams: 3
+  bench_total: 4
+
 notes:
-  - "Roster détaillé à fournir."
-  - "Tous les autres choix sont actifs."
+  - "Tous les choix autres que les 4 joueurs au banc sont actifs."
+  - "Elias Pettersson doit toujours être traité comme le centre des Vancouver Canucks."
